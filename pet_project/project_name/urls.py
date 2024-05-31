@@ -23,8 +23,10 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("transportation/", include("transportation.urls")),
     path("admin/", admin.site.urls),
-    path("test/", views.test, name="test"),
-    path("test2/", views.test2, name="test2"),
-    path("test3/", views.test3, name="test3"),
+    path("about/", views.about, name="about"),
+    path("services/", views.services, name="services"),
+    path("pricing/", views.pricing, name="pricing"),
+    path("contact/", views.contact, name="contact"),
 ]
+
 

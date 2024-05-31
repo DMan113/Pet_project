@@ -5,16 +5,16 @@ from django.http import HttpResponse
 from django.http import HttpResponse
 
 def home(request):
-    return HttpResponse("Home Page")
+     return render(request, 'index.html')
 
-def transportation(request):
-    return HttpResponse("Transportation")
+def about(request):
+    return render(request, 'about.html')
 
-def test(request):
-    return HttpResponse("Test Url1")
+def services(request):
+    return render(request, 'services.html')
 
-def test2(request):
-    return HttpResponse("Test Url2")
+def pricing(request):
+   return render(request, 'pricing.html')
 
-def test3(request):
-    return HttpResponse("Test Url3")
+def contact(request):
+   return render(request, 'contact.html')
