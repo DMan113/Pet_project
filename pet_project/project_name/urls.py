@@ -21,12 +21,14 @@ from transportation import views
 
 urlpatterns = [
     path("", views.home, name="home"),
-    path("transportation/", include("transportation.urls")),
+    #path("transportation/", include("transportation.urls")),
     path("admin/", admin.site.urls),
     path("about/", views.about, name="about"),
     path("services/", views.services, name="services"),
     path("pricing/", views.pricing, name="pricing"),
     path("contact/", views.contact, name="contact"),
+    path("service-details/", views.service_details, name="service_details"),
+    path("get-a-quote/", views.get_a_quote, name="get_a_quote"),
 ]
 
 

@@ -18,3 +18,13 @@ def pricing(request):
 
 def contact(request):
    return render(request, 'contact.html')
+
+def service_details(request):
+   return render(request, 'service-details.html')
+
+
+def get_a_quote(request):
+   return render(request, 'get-a-quote.html')
+
+
+
