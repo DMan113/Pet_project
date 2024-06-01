@@ -261,3 +261,16 @@ class Users(models.Model):
     class Meta:
         managed = False
         db_table = 'users'
+
+
+class Quote(models.Model):
+    departure = models.CharField(max_length=100)
+    delivery = models.CharField(max_length=100)
+    weight = models.CharField(max_length=12)
+    dimensions = models.CharField(max_length=20)
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=320)
+    phone = models.CharField(max_length=20)
+    message = models.TextField()
+
+    
