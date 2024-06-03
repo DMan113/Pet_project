@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import RegexValidator
 
 # Create your models here.
 
@@ -253,13 +254,20 @@ class UserRoles(models.Model):
 class Users(models.Model):
     user_id = models.BigAutoField(primary_key=True)
     username = models.CharField(unique=True, max_length=255)
-    password_hash = models.CharField(max_length=255)
+    password_hash = models.CharField(max_length=255, validators=[RegexValidator(
+        r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$',
+        message='Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long.'
+    )])
     email = models.CharField(unique=True, max_length=255)
-    registration_date = models.DateTimeField()
-    is_active = models.BooleanField()
+    first_name = models.CharField(max_length=100, blank=True, null=True)
+    last_name = models.CharField(max_length=100, blank=True, null=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    address = models.CharField(max_length=100, blank=True, null=True)
+    registration_date = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'users'
 
 

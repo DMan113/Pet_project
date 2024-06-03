@@ -1,6 +1,8 @@
-from django.shortcuts import render
-from .forms import QuoteForm
-from .models import Quote
+from django.shortcuts import render, redirect
+from .forms import QuoteForm, UserRegistrationForm
+from .models import Quote, Users
+from django.contrib import messages
+
 
 
 def home(request):
@@ -20,6 +22,8 @@ def contact(request):
 
 def service_details(request):
     return render(request, 'service-details.html')
+
+
 
 def get_a_quote(request):
     if request.method == 'POST':
@@ -43,5 +47,24 @@ def get_a_quote(request):
         form = QuoteForm()
 
     return render(request, 'get-a-quote.html')
+
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            messages.success(request, 'Registration successful.')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = UserRegistrationForm()
+    return render(request, 'register.html', {'form': form})
+
+
 
 

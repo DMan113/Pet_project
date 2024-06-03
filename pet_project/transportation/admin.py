@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Cars, Drivers, Shipments, Customers, Quote, DestinationDrivers, Destinations
+from .models import Cars, Drivers, Shipments, Customers, Quote, DestinationDrivers, Destinations, Users
 
 
 admin.site.register(Cars)
@@ -10,3 +10,4 @@ admin.site.register(Customers)
 admin.site.register(Quote)
 admin.site.register(DestinationDrivers)
 admin.site.register(Destinations)
+admin.site.register(Users)
