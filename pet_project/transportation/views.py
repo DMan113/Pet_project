@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .forms import QuoteForm, UserRegistrationForm
-from .models import Quote, Users
+from .forms import QuoteForm, AuthUserRegistrationForm
+from .models import Quote, AuthUser
 from django.contrib import messages
 
 
@@ -29,7 +29,6 @@ def get_a_quote(request):
     if request.method == 'POST':
         form = QuoteForm(request.POST)
         if form.is_valid():
-            # Зберігаємо дані у базу даних
             form_data = form.cleaned_data
             quote_request = Quote.objects.create(
                 departure=form_data['departure'],
@@ -52,19 +51,15 @@ def get_a_quote(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = AuthUserRegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
-            user.save()
-            messages.success(request, 'Registration successful.')
-            return redirect('home')
+            form.save()
+            messages.success(request, 'Реєстрація успішна.')
+            return redirect('home')  
         else:
-            messages.error(request, 'Please correct the errors below.')
+            messages.error(request, 'Будь ласка, виправте помилки у формі.')
     else:
-        form = UserRegistrationForm()
+        form = AuthUserRegistrationForm()
     return render(request, 'register.html', {'form': form})
-
-
 
 

@@ -36,14 +36,15 @@ class AuthPermission(models.Model):
 class AuthUser(models.Model):
     password = models.CharField(max_length=128)
     last_login = models.DateTimeField(blank=True, null=True)
-    is_superuser = models.BooleanField()
+    is_superuser = models.BooleanField(default=False)
     username = models.CharField(unique=True, max_length=150)
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     email = models.CharField(max_length=254)
-    is_staff = models.BooleanField()
-    is_active = models.BooleanField()
-    date_joined = models.DateTimeField()
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -216,13 +217,6 @@ class ProductSpecifications(models.Model):
         db_table = 'product_specifications'
 
 
-class Roles(models.Model):
-    role_id = models.BigAutoField(primary_key=True)
-    role_name = models.CharField(unique=True, max_length=255)
-
-    class Meta:
-        managed = False
-        db_table = 'roles'
 
 
 class Shipments(models.Model):
@@ -240,35 +234,6 @@ class Shipments(models.Model):
         managed = False
         db_table = 'shipments'
 
-
-class UserRoles(models.Model):
-    user = models.OneToOneField('Users', models.DO_NOTHING, primary_key=True)  # The composite primary key (user_id, role_id) found, that is not supported. The first column is selected.
-    role = models.ForeignKey(Roles, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'user_roles'
-        unique_together = (('user', 'role'),)
-
-
-class Users(models.Model):
-    user_id = models.BigAutoField(primary_key=True)
-    username = models.CharField(unique=True, max_length=255)
-    password_hash = models.CharField(max_length=255, validators=[RegexValidator(
-        r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$',
-        message='Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long.'
-    )])
-    email = models.CharField(unique=True, max_length=255)
-    first_name = models.CharField(max_length=100, blank=True, null=True)
-    last_name = models.CharField(max_length=100, blank=True, null=True)
-    phone_number = models.CharField(max_length=20, blank=True, null=True)
-    address = models.CharField(max_length=100, blank=True, null=True)
-    registration_date = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
-
-    class Meta:
-        managed = True
-        db_table = 'users'
 
 
 class Quote(models.Model):
