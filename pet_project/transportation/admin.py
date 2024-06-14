@@ -9,5 +9,5 @@ admin.site.register(Shipments)
 admin.site.register(Customers)
 admin.site.register(Quote)
 admin.site.register(DestinationDrivers)
-admin.site.register(Destinations)
+
 
