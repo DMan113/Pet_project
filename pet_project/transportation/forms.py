@@ -1,5 +1,5 @@
 from django import forms
-from .models import Quote, AuthUser
+from .models import Quote, AuthUser, UserProfile, Order
 from django.core.validators import RegexValidator
 from django.contrib.auth.hashers import make_password
 
@@ -35,3 +35,16 @@ class AuthUserRegistrationForm(forms.ModelForm):
         
         cleaned_data['password'] = make_password(password)
         return cleaned_data
+    
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_picture', 'bio', 'location', 'birth_date']
+
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['item_name', 'status']

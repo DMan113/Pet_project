@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
-from .forms import QuoteForm, AuthUserRegistrationForm
-from .models import Quote, AuthUser
+from .forms import QuoteForm, AuthUserRegistrationForm, UserProfileForm, OrderForm
+from .models import Quote, Order
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+
 
 
 def home(request):
@@ -77,5 +79,37 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+
+
+@login_required
+def profile_view(request):
+    profile = request.user.userprofile
+    orders = Order.objects.filter(user=request.user)
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = UserProfileForm(instance=profile)
+    return render(request, 'profile.html', {'form': form, 'orders': orders})
+
+@login_required
+def create_order_view(request):
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.user = request.user
+            order.save()
+            return redirect('profile')
+    else:
+        form = OrderForm()
+    return render(request, 'create_order.html', {'form': form})
+
+
+
+
 
 

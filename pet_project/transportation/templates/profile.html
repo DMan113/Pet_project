@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<!-- ======= Breadcrumbs ======= -->
+<div class="breadcrumbs">
+    <div class="page-header d-flex align-items-center" style="background-image: url('/static/img/page-header.jpg');">
+        <div class="container position-relative">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <h2>Profile</h2>
+                    <p>Manage your profile information and view your orders.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav>
+        <div class="container">
+            <ol>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li>Profile</li>
+            </ol>
+        </div>
+    </nav>
+</div><!-- End Breadcrumbs -->
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>User Profile</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="profile_picture">Profile Picture</label>
+                            <input type="file" name="profile_picture" id="profile_picture" class="form-control">
+                            {% if form.profile_picture.value %}
+                                <img src="{{ form.profile_picture.value.url }}" alt="Profile Picture" class="img-thumbnail mt-2" width="150">
+                            {% endif %}
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="bio">Bio</label>
+                            <textarea name="bio" id="bio" class="form-control">{{ form.bio.value }}</textarea>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="location">Location</label>
+                            <input type="text" name="location" id="location" class="form-control" value="{{ form.location.value }}">
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="birth_date">Birth Date</label>
+                            <input type="date" name="birth_date" id="birth_date" class="form-control" value="{{ form.birth_date.value }}">
+                        </div>
+                        <div class="form-group mt-3 text-center">
+                            <button type="submit" class="btn btn-primary btn-block">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header text-center">
+                    <h2>My Orders</h2>
+                </div>
+                <div class="card-body">
+                    {% if orders %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Order Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                    <tr>
+                                        <td>{{ order.item_name }}</td>
+                                        <td>{{ order.order_date }}</td>
+                                        <td>{{ order.status }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>You have no orders.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
