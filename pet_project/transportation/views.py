@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .forms import QuoteForm, AuthUserRegistrationForm, UserProfileForm, OrderForm
-from .models import Quote, Order
+from .forms import QuoteForm, AuthUserRegistrationForm, UserProfileForm
+from .models import Quote
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -24,31 +24,6 @@ def contact(request):
 
 def service_details(request):
     return render(request, 'service-details.html')
-
-
-
-def get_a_quote(request):
-    if request.method == 'POST':
-        form = QuoteForm(request.POST)
-        if form.is_valid():
-            form_data = form.cleaned_data
-            quote_request = Quote.objects.create(
-                departure=form_data['departure'],
-                delivery=form_data['delivery'],
-                weight=form_data['weight'],
-                dimensions=form_data['dimensions'],
-                name=form_data['name'],
-                email=form_data['email'],
-                phone=form_data['phone'],
-                message=form_data['message']
-            )
-            
-            return render(request, 'get-a-quote.html')
-    else:
-        form = QuoteForm()
-
-    return render(request, 'get-a-quote.html')
-
 
 
 def register(request):
@@ -82,10 +57,11 @@ def logout_view(request):
 
 
 
-@login_required
+
+@login_required(login_url='/login/')
 def profile_view(request):
     profile = request.user.userprofile
-    orders = Order.objects.filter(user=request.user)
+    quotes = Quote.objects.filter(user=request.user)
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
@@ -93,22 +69,30 @@ def profile_view(request):
             return redirect('profile')
     else:
         form = UserProfileForm(instance=profile)
-    return render(request, 'profile.html', {'form': form, 'orders': orders})
+    return render(request, 'profile.html', {'form': form, 'quotes': quotes})
 
-@login_required
-def create_order_view(request):
+@login_required(login_url='/login/')
+def get_a_quote(request):
     if request.method == 'POST':
-        form = OrderForm(request.POST)
+        form = QuoteForm(request.POST)
         if form.is_valid():
-            order = form.save(commit=False)
-            order.user = request.user
-            order.save()
-            return redirect('profile')
+            form_data = form.cleaned_data
+            quote_request = Quote.objects.create(
+                user=request.user,  # Додаємо користувача до запиту
+                departure=form_data['departure'],
+                delivery=form_data['delivery'],
+                weight=form_data['weight'],
+                dimensions=form_data['dimensions'],
+                name=form_data['name'],
+                email=form_data['email'],
+                phone=form_data['phone'],
+                message=form_data['message']
+            )
+            return redirect('profile')  # Перенаправляємо на профіль після створення запиту
     else:
-        form = OrderForm()
-    return render(request, 'create_order.html', {'form': form})
+        form = QuoteForm()
 
-
+    return render(request, 'get-a-quote.html', {'form': form})
 
 
 

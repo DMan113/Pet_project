@@ -1,8 +1,7 @@
 from django import forms
-from .models import Quote, AuthUser, UserProfile, Order
+from .models import Quote, AuthUser, UserProfile
 from django.core.validators import RegexValidator
 from django.contrib.auth.hashers import make_password
-
 
 
 class QuoteForm(forms.ModelForm):
@@ -44,7 +43,3 @@ class UserProfileForm(forms.ModelForm):
         fields = ['profile_picture', 'bio', 'location', 'birth_date']
 
 
-class OrderForm(forms.ModelForm):
-    class Meta:
-        model = Order
-        fields = ['item_name', 'status']

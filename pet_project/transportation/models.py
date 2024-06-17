@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.conf import settings
 
 # Create your models here.
@@ -184,41 +185,6 @@ class Drivers(models.Model):
         db_table = 'drivers'
 
 
-class Invoices(models.Model):
-    invoice_id = models.BigAutoField(primary_key=True)
-    shipment = models.ForeignKey('Shipments', models.DO_NOTHING)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    invoice_date = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'invoices'
-
-
-class Payments(models.Model):
-    payment_id = models.BigAutoField(primary_key=True)
-    shipment = models.ForeignKey('Shipments', models.DO_NOTHING)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_date = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'payments'
-
-
-class ProductSpecifications(models.Model):
-    specification_id = models.BigAutoField(primary_key=True)
-    product_name = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    other_details = models.JSONField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'product_specifications'
-
-
-
-
 class Shipments(models.Model):
     shipment_id = models.AutoField(primary_key=True)
     car = models.ForeignKey(Cars, models.DO_NOTHING, blank=True, null=True)
@@ -245,6 +211,11 @@ class Quote(models.Model):
     email = models.EmailField(max_length=320)
     phone = models.CharField(max_length=20)
     message = models.TextField()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Quote by {self.name} from {self.departure} to {self.delivery}"
+
 
 
     
@@ -260,18 +231,3 @@ class UserProfile(models.Model):
     
 
 
-class Order(models.Model):
-    STATUS_CHOICES = [
-        ('Pending', 'Pending'),
-        ('Completed', 'Completed'),
-        ('Cancelled', 'Cancelled'),
-    ]
-    
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    item_name = models.CharField(max_length=255)
-    order_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Pending')
-
-    def __str__(self):
-        return f"{self.item_name} - {self.user.username}"
-    
