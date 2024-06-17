@@ -49,7 +49,7 @@
           <li><a href="{% url 'services' %}">Services</a></li>
           <li><a href="{% url 'pricing' %}">Pricing</a></li>
           <li><a href="{% url 'contact' %}">Contact</a></li>
-          <li><a class="get-a-quote" href="{% url 'get_a_quote' %}">Get a Quote</a></li>
+          <li><a class="get-a-quote" href="{% url 'create_order' %}">Create Order</a></li>
           {% if user.is_authenticated %}
             <li><a class="get-a-quote" href="{% url 'profile' %}">My Profile</a></li>
             <li><a class="get-a-quote" href="{% url 'logout' %}">Logout</a></li>

@@ -1,8 +1,8 @@
 from django import forms
-from .models import Quote, AuthUser, UserProfile
+from .models import Quote, AuthUser, UserProfile, Order
 from django.core.validators import RegexValidator
 from django.contrib.auth.hashers import make_password
-
+from django.contrib.auth.forms import UserCreationForm
 
 class QuoteForm(forms.ModelForm):
     class Meta:
@@ -22,7 +22,7 @@ class AuthUserRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = AuthUser
-        fields = ['username', 'first_name', 'last_name', 'email', 'phone_number', 'password']
+        fields = ['username', 'first_name', 'last_name', 'email', 'password']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -40,6 +40,13 @@ class AuthUserRegistrationForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['profile_picture', 'bio', 'location', 'birth_date']
+        fields = ['profile_picture', 'bio', 'location', 'birth_date', 'phone_number']
+
+
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['departure', 'delivery', 'weight', 'dimensions', 'description']
 
 

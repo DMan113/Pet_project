@@ -33,7 +33,6 @@ class AuthPermission(models.Model):
         db_table = 'auth_permission'
         unique_together = (('content_type', 'codename'),)
 
-
 class AuthUser(models.Model):
     password = models.CharField(max_length=128)
     last_login = models.DateTimeField(blank=True, null=True)
@@ -45,12 +44,11 @@ class AuthUser(models.Model):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True)
-    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    
 
     class Meta:
         managed = False
         db_table = 'auth_user'
-
 
 class AuthUserGroups(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -219,15 +217,39 @@ class Quote(models.Model):
 
 
     
+
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
     location = models.CharField(max_length=30, blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)  # Додане поле
 
     def __str__(self):
         return self.user.username
     
 
 
+
+class Order(models.Model):
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Processing', 'Processing'),
+        ('Shipped', 'Shipped'),
+        ('Completed', 'Completed'),
+        ('Cancelled', 'Cancelled'),
+    ]
+    
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    departure = models.CharField(max_length=100)
+    delivery = models.CharField(max_length=100)
+    weight = models.CharField(max_length=12)
+    dimensions = models.CharField(max_length=20)
+    description = models.TextField(blank=True, null=True)
+    order_date = models.DateTimeField(auto_now_add=True)
+    cost = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Pending')
+
+    def __str__(self):
+        return f"{self.departure} to {self.delivery} - {self.user.username}"
