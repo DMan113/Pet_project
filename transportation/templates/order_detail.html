@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Details{% endblock %}
+
+{% block content %}
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+      <div class="page-header d-flex align-items-center" style="background-image: url('/static/img/page-header.jpg');">
+        <div class="container position-relative">
+          <div class="row d-flex justify-content-center">
+            <div class="col-lg-6 text-center">
+              <h2>Order Details</h2>
+              <p>View the details of your order.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav>
+        <div class="container">
+          <ol>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'order_list' %}">My Orders</a></li>
+            <li>Order Details</li>
+          </ol>
+        </div>
+      </nav>
+    </div><!-- End Breadcrumbs -->
+
+    <div class="container mt-5">
+        <h2>Order Details</h2>
+        <p><strong>Departure:</strong> {{ order.departure }}</p>
+        <p><strong>Delivery:</strong> {{ order.delivery }}</p>
+        <p><strong>Weight:</strong> {{ order.weight }}</p>
+        <p><strong>Dimensions:</strong> {{ order.dimensions }}</p>
+        <p><strong>Description:</strong> {{ order.description }}</p>
+        <p><strong>Order Date:</strong> {{ order.order_date }}</p>
+        <p><strong>Cost:</strong> {{ order.cost }}</p>
+        <p><strong>Status:</strong> {{ order.status }}</p>
+    </div>
+</main>
+{% endblock %}

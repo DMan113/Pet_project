@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import QuoteForm, AuthUserRegistrationForm, UserProfileForm, OrderForm
 from .models import Quote, Order
 from django.contrib import messages
@@ -98,8 +98,6 @@ def get_a_quote(request):
     return render(request, 'get-a-quote.html', {'form': form})
 
 
-
-@login_required(login_url='/login/')
 def create_order(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
@@ -107,13 +105,13 @@ def create_order(request):
             order = form.save(commit=False)
             order.user = request.user
             order.save()
+            print("Order created successfully!")  # Повідомлення для відлагодження
             return redirect('order_list')
+        else:
+            print("Form is not valid")  # Повідомлення для відлагодження
     else:
         form = OrderForm()
     return render(request, 'create_order.html', {'form': form})
-
-
-
 
 @login_required
 def order_list(request):
@@ -125,9 +123,8 @@ def order_list(request):
 
 @login_required
 def order_detail(request, order_id):
-    order = Order.objects.get(id=order_id, user=request.user)
+    order = get_object_or_404(Order, id=order_id, user=request.user)
     return render(request, 'order_detail.html', {'order': order})
-
 
 
 

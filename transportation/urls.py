@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views 
 
 urlpatterns = [
     path("", views.home, name="home"),
@@ -14,4 +14,6 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile_view, name='profile'),
     path('create-order/', views.create_order, name='create_order'),
+    path('order_list/', views.order_list, name='order_list'),
+    path('order_detail/<int:order_id>/', views.order_detail, name='order_detail'),
 ]
